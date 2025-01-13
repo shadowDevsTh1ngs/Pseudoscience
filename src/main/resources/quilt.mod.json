@@ -1,0 +1,40 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "${group}",
+		"id": "pseudoscience",
+		"version": "${version}",
+		"metadata": {
+			"name": "Pseudoscience",
+			"description": "Fleshed out tech mod, eventually",
+			"contributors": {
+				"Your name here": "Owner"
+			},
+			"contact": {
+				"homepage": "none",
+				"issues": "suffer",
+				"sources": "https://github.com/shadowDevsTh1ngs/Pseudoscience"
+			},
+			"icon": "assets/pseudoscience/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": "io.github.shadowdevsthings.pseudoscience.Pseudoscience"
+		},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.19.1"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=7.0.2"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.20"
+			}
+		]
+	},
+	"mixin": "pseudoscience.mixins.json"
+}

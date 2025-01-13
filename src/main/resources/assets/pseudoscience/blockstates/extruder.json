@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "pseudoscience:block/extruder"
+    },
+    "facing=east": {
+      "model": "pseudoscience:block/extruder", "y": 90
+    },
+    "facing=south": {
+      "model": "pseudoscience:block/extruder", "y": 180
+    },
+    "facing=west": {
+      "model": "pseudoscience:block/extruder", "y": 270
+    }
+  }
+}
