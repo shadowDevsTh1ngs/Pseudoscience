@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "WBL",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "W": {
+      "item": "minecraft:water_bucket"
+    },
+    "B": {
+      "item": "minecraft:blast_furnace"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "result": {
+    "item": "pseudoscience:extruder",
+    "count": 1
+  }
+}

@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 
 public class PseudoscienceBlocks {
-	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create());
+	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0f).requiresTool());
 
 
 	public static void register(ModContainer mod) {
