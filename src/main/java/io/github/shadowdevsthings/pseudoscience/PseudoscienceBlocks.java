@@ -3,7 +3,7 @@ package io.github.shadowdevsthings.pseudoscience;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -11,10 +11,12 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder;
 
 public class PseudoscienceBlocks {
 	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0f).requiresTool());
-
+	public static final BlockEntityType<MachineBlockEntity> MACHINE_BLOCK_ENTITY = QuiltBlockEntityTypeBuilder
+		.<MachineBlockEntity>create(MachineBlockEntity::new, EXTRUDER).build();
 
 	public static void register(ModContainer mod) {
 		Registry.register(Registries.BLOCK, new Identifier(mod.metadata().id(), "extruder"), EXTRUDER);
@@ -23,5 +25,7 @@ public class PseudoscienceBlocks {
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL_BLOCKS).register(entries -> {
 			entries.addItem(EXTRUDER.asItem());
 		});
+
+		Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(mod.metadata().id(), "extruder"), MACHINE_BLOCK_ENTITY);
 	}
 }
