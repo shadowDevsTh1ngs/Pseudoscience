@@ -6,14 +6,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -67,46 +65,30 @@ public class MachineBlock extends BlockWithEntity {
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (world.isClient) return ActionResult.SUCCESS;
+		if (!world.isClient) {
+			// This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
+			// a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
+			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
 
-		if (!(world.getBlockEntity(pos) instanceof MachineBlockEntity blockEntity)) {
-			return ActionResult.FAIL;
-		}
-
-		if (!player.getStackInHand(hand).isEmpty()) {
-			// Check what is the first open slot and put an item from the player's hand there
-			if (blockEntity.getStack(0).isEmpty()) {
-				// Put the stack the player is holding into the inventory
-				blockEntity.setStack(0, player.getStackInHand(hand).copy());
-				// Remove the stack from the player's hand
-				player.getStackInHand(hand).setCount(0);
-			} else if (blockEntity.getStack(1).isEmpty()) {
-				blockEntity.setStack(1, player.getStackInHand(hand).copy());
-				player.getStackInHand(hand).setCount(0);
-			} else {
-				// If the inventory is full we'll notify the player
-				player.sendMessage(Text.literal("The inventory is full! The first slot holds ")
-					.append(blockEntity.getStack(0).getName())
-					.append(" and the second slot holds ")
-					.append(blockEntity.getStack(1).getName()), true);
-			}
-		} else {
-			// If the player is not holding anything we'll get give him the items in the block entity one by one
-
-			// Find the first slot that has an item and give it to the player
-			if (!blockEntity.getStack(1).isEmpty()) {
-				// Give the player the stack in the inventory
-				player.getInventory().offerOrDrop(blockEntity.getStack(1));
-				// Remove the stack from the inventory
-				blockEntity.removeStack(1);
-			} else if (!blockEntity.getStack(0).isEmpty()) {
-				player.getInventory().offerOrDrop(blockEntity.getStack(0));
-				blockEntity.removeStack(0);
-			} else {
-				return ActionResult.FAIL;
+			if (screenHandlerFactory != null) {
+				// With this call the server will request the client to open the appropriate Screenhandler
+				player.openHandledScreen(screenHandlerFactory);
 			}
 		}
 		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (state.getBlock() != newState.getBlock()) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof MachineBlockEntity machineBlockEntity) {
+				ItemScatterer.spawn(world, pos, machineBlockEntity);
+				// update comparators
+				world.updateComparators(pos,this);
+			}
+			super.onStateReplaced(state, world, pos, newState, moved);
+		}
 	}
 
 }
