@@ -17,8 +17,9 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder;
 
 public class PseudoscienceBlocks {
+	public static final int MachineInventorySize = 3;
 	//Blocks
-	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0f).requiresTool());
+	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0f).requiresTool(), MachineInventorySize);
 
 	//Supporting stuff
 	public static final BlockEntityType<MachineBlockEntity> MACHINE_BLOCK_ENTITY = QuiltBlockEntityTypeBuilder

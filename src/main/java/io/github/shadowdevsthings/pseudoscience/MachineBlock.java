@@ -21,10 +21,18 @@ public class MachineBlock extends BlockWithEntity {
 
 	public static final MapCodec<MachineBlock> CODEC = Block.method_54094(MachineBlock::new);
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+	public final int inventorySize;
 
 	public MachineBlock(Settings settings) {
 		super(settings);
 		setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+		inventorySize = 9;
+	}
+
+	public MachineBlock(Settings settings, int size) {
+		super(settings);
+		setDefaultState(getDefaultState().with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+		inventorySize = size;
 	}
 
 	@Override
@@ -43,7 +51,7 @@ public class MachineBlock extends BlockWithEntity {
 	}
 
 	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new MachineBlockEntity(pos, state);
+		return new MachineBlockEntity(pos, state, inventorySize);
 	}
 
 	@Override
