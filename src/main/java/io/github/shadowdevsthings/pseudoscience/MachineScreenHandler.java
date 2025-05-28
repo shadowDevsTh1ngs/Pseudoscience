@@ -21,7 +21,7 @@ public class MachineScreenHandler extends ScreenHandler {
 	// This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
 	// and can therefore directly provide it as an argument. This inventory will then be synced to the client.
 	public MachineScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
-		super(PseudoscienceBlocks.MACHINE_SCREEN_HANDLER, syncId);
+		super(Pseudoscience.BOX_SCREEN_HANDLER, syncId);
 		checkSize(inventory, 9);
 		this.inventory = inventory;
 		// some inventories do custom logic when a player opens it.
@@ -57,7 +57,7 @@ public class MachineScreenHandler extends ScreenHandler {
 
 	// Shift + Player Inv Slot
 	@Override
-	public ItemStack quickTransfer(PlayerEntity player, int invSlot) {
+	public ItemStack quickMove(PlayerEntity player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(invSlot);
 		if (slot != null && slot.hasStack()) {
