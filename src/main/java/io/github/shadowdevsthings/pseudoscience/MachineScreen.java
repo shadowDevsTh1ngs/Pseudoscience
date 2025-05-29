@@ -11,7 +11,9 @@ import net.minecraft.util.Identifier;
 public class MachineScreen extends HandledScreen<MachineScreenHandler> {
 	// A path to the gui texture. In this example we use the texture from the dispenser
 
-	private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/dispenser.png");
+	//private static final Identifier TEXTURE = new Identifier("minecraft", "textures/gui/container/dispenser.png");
+	private static final Identifier TEXTURE = new Identifier("textures/gui/container/furnace.png");
+
 
 	public MachineScreen(MachineScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);

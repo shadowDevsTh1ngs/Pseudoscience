@@ -14,11 +14,17 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 
 public class MachineBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
-	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
+	private final DefaultedList<ItemStack> items;
 
 
 	public MachineBlockEntity(BlockPos pos, BlockState state) {
 		super(PseudoscienceBlocks.MACHINE_BLOCK_ENTITY, pos, state);
+		items = DefaultedList.ofSize(9, ItemStack.EMPTY);
+	}
+
+	public MachineBlockEntity(BlockPos pos, BlockState state, int inventorySize) {
+		super(PseudoscienceBlocks.MACHINE_BLOCK_ENTITY, pos, state);
+		items = DefaultedList.ofSize(inventorySize, ItemStack.EMPTY);
 	}
 
 	@Override
