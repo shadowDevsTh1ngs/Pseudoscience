@@ -3,6 +3,8 @@ package io.github.shadowdevsthings.pseudoscience;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -97,6 +99,11 @@ public class MachineBlock extends BlockWithEntity {
 			}
 			super.onStateReplaced(state, world, pos, newState, moved);
 		}
+	}
+
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		return checkType(type, PseudoscienceBlocks.MACHINE_BLOCK_ENTITY, MachineBlockEntity::tick);
 	}
 
 }

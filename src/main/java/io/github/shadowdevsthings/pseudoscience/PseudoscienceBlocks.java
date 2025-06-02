@@ -17,14 +17,26 @@ import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder;
 
 public class PseudoscienceBlocks {
+
+	//Basically configs
 	public static final int MachineInventorySize = 3;
+
+
+
+
 	//Blocks
 	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0f).requiresTool(), MachineInventorySize);
+
+
 
 	//Supporting stuff
 	public static final BlockEntityType<MachineBlockEntity> MACHINE_BLOCK_ENTITY = QuiltBlockEntityTypeBuilder
 		.<MachineBlockEntity>create(MachineBlockEntity::new, EXTRUDER).build();
+
 	public static final ScreenHandlerType<MachineScreenHandler> MACHINE_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER_TYPE, new Identifier("pseudoscience:extruder"), new ScreenHandlerType<>(MachineScreenHandler::new, FeatureFlagBitSet.empty()));
+
+
+
 
 	public static void register(ModContainer mod) {
 		//Registering blocks and corresponding items
@@ -39,5 +51,12 @@ public class PseudoscienceBlocks {
 		//Registering supporting stuff
 		Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(mod.metadata().id(), "extruder"), MACHINE_BLOCK_ENTITY);
 		HandledScreens.register(MACHINE_SCREEN_HANDLER, MachineScreen::new);
+
+
+		//Recipes
+		Registry.register(Registries.RECIPE_SERIALIZER, ExtruderRecipeSerializer.ID, ExtruderRecipeSerializer.INSTANCE);
+		Registry.register(Registries.RECIPE_TYPE, new Identifier("pseudoscience", ExtruderRecipe.Type.ID), ExtruderRecipe.Type.INSTANCE);
+		Pseudoscience.LOGGER.info(Registries.RECIPE_TYPE.getIds().toString());
+
 	}
 }

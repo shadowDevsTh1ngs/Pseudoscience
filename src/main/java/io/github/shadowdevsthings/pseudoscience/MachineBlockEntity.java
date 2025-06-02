@@ -5,13 +5,18 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.RecipeHolder;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Optional;
 
 public class MachineBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 	private final DefaultedList<ItemStack> items;
@@ -59,4 +64,23 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
 	public void writeNbt(NbtCompound nbt) {
 		Inventories.writeNbt(nbt, items);
 	}
+
+
+	public static void tick(World world, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+		if(!world.isClient()) {
+			Optional<RecipeHolder<ExtruderRecipe>> match = world.getRecipeManager().getFirstMatch(ExtruderRecipe.Type.INSTANCE, blockEntity, world);
+			if(match.isPresent()) {
+				ItemStack output = match.get().value().getResult();
+				if(blockEntity.getStack(2).isEmpty()) {
+					blockEntity.setStack(2, output.copy());
+				} else if (ItemStack.itemsMatch(blockEntity.getStack(2), output)) {
+					blockEntity.getStack(2).increment(1);
+				}
+
+			} else {
+				Pseudoscience.LOGGER.info("It ticked, no match");
+			}
+		}
+	}
+
 }

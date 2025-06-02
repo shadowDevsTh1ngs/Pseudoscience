@@ -1,6 +1,6 @@
-package io.github.shadowdevsthings.pseudoscience.mixin;
+package io.github.shadowdevsthings.pseudoscience;
 
-import net.minecraft.inventory.CraftingInventory;
+import com.google.gson.JsonObject;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -18,8 +18,8 @@ public class ExtruderRecipe implements Recipe<Inventory> {
 	private final ItemStack result;
 	private final Identifier id;
 
-	public ExtruderRecipe(Identifier id, ItemStack result, Ingredient input) {
-		this.id = id;
+	public ExtruderRecipe(ItemStack result, Ingredient input) {
+		this.id = new Identifier("pseudoscience:extruding");
 		this.input = input;
 		this.result = result;
 	}
@@ -30,6 +30,10 @@ public class ExtruderRecipe implements Recipe<Inventory> {
 
 	@Override
 	public ItemStack getResult(DynamicRegistryManager manager) {
+		return this.result;
+	}
+
+	public ItemStack getResult() {
 		return this.result;
 	}
 
@@ -55,18 +59,25 @@ public class ExtruderRecipe implements Recipe<Inventory> {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return null;
+		return ExtruderRecipeSerializer.INSTANCE;
 	}
 
 	public static class Type implements RecipeType<ExtruderRecipe> {
 		private Type() {}
 		public static final Type INSTANCE = new Type();
-		public static final String ID = "extruder_recipe";
+		public static final String ID = "extruding";
 	}
 
 	@Override
 	public RecipeType<?> getType() {
 		return Type.INSTANCE;
+	}
+
+	class ExtruderRecipeJsonFormat {
+		JsonObject input;
+		String outputItem;
+		int outputAmount;
+		int processTime;
 	}
 
 

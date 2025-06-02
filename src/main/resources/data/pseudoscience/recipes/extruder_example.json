@@ -1,0 +1,9 @@
+{
+  "type" : "pseudoscience:extruding",
+  "input" : {
+    "item": "minecraft:iron_ingot"
+  },
+  "outputItem": "minecraft:cobblestone",
+  "outputAmount": "20",
+  "processingTime": "200"
+}
