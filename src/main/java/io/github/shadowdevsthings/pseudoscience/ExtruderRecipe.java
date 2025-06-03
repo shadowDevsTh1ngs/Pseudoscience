@@ -17,11 +17,15 @@ public class ExtruderRecipe implements Recipe<Inventory> {
 	private final Ingredient input;
 	private final ItemStack result;
 	private final Identifier id;
+	private final int processTime;
+	private final int outputAmount;
 
-	public ExtruderRecipe(ItemStack result, Ingredient input) {
+	public ExtruderRecipe(Ingredient input, ItemStack result, int processTime, int outputAmount) {
 		this.id = new Identifier("pseudoscience:extruding");
 		this.input = input;
 		this.result = result;
+		this.processTime = processTime;
+		this.outputAmount = outputAmount;
 	}
 
 	public Ingredient getInput() {
@@ -37,10 +41,19 @@ public class ExtruderRecipe implements Recipe<Inventory> {
 		return this.result;
 	}
 
+	//This is here for Codec reasons
+	public ItemStack getTrueResult() {
+		return this.result;
+	}
+
 	//Should override?
 	public Identifier getId() {
 		return this.id;
 	}
+
+	public int getProcessTime() {return this.processTime;}
+
+	public int getOutputAmount() {return this.outputAmount;}
 
 	public ItemStack craft(Inventory inv, DynamicRegistryManager manager) {
 		return this.result;

@@ -70,15 +70,16 @@ public class MachineBlockEntity extends BlockEntity implements ImplementedInvent
 		if(!world.isClient()) {
 			Optional<RecipeHolder<ExtruderRecipe>> match = world.getRecipeManager().getFirstMatch(ExtruderRecipe.Type.INSTANCE, blockEntity, world);
 			if(match.isPresent()) {
-				ItemStack output = match.get().value().getResult();
+				ItemStack output = match.get().value().getResult().copy();
+				output.increment(match.get().value().getOutputAmount()-1);
 				if(blockEntity.getStack(2).isEmpty()) {
 					blockEntity.setStack(2, output.copy());
-				} else if (ItemStack.itemsMatch(blockEntity.getStack(2), output)) {
-					blockEntity.getStack(2).increment(1);
+					blockEntity.getStack(0).decrement(1);
+				} else if (ItemStack.itemsMatch(blockEntity.getStack(2), output) && blockEntity.getStack(2).getCount() + output.getCount() <= 64) {
+					blockEntity.getStack(2).increment(output.getCount());
+					blockEntity.getStack(0).decrement(1);
 				}
 
-			} else {
-				Pseudoscience.LOGGER.info("It ticked, no match");
 			}
 		}
 	}
