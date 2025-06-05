@@ -32,8 +32,8 @@ public class MachineScreen extends HandledScreen<MachineScreenHandler> {
 		graphics.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
 
 		int fuelTextureLevel = MathHelper.ceil(MathHelper.clamp((float) this.handler.machineData.get(1) / (float) this.handler.machineData.get(0), 0.0F, 1.0F) * 13.0F) + 1;
-		Pseudoscience.LOGGER.info("value: " + this.handler.machineData.get(1)  + " level: " + fuelTextureLevel);
-		int progressTextureLevel = 10;
+
+		int progressTextureLevel = MathHelper.ceil((this.handler.machineData.get(2) != 0 && this.handler.machineData.get(3) != 0 ? MathHelper.clamp((float)this.handler.machineData.get(3) / (float)this.handler.machineData.get(2), 0.0F, 1.0F) : 0.0F) * 24.0F);;
 		graphics.drawGuiTexture(FIRE_TEXTURE, 14, 14, 0, 14 - fuelTextureLevel, 56 + x, 36 + 14 + y - fuelTextureLevel, 14, fuelTextureLevel);
 		graphics.drawGuiTexture(ARROW_TEXTURE, 24, 16, 0, 0, 79 + x, 34 + y, progressTextureLevel, 16);
 	}

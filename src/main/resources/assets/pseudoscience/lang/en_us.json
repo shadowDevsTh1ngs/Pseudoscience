@@ -1,3 +1,4 @@
 {
-  "block.pseudoscience.extruder": "Extruder"
+  "block.pseudoscience.extruder": "Extruder",
+  "block.pseudoscience.item_tube": "Item Tube"
 }

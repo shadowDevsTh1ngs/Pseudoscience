@@ -28,9 +28,11 @@ public class MachineScreenHandler extends ScreenHandler {
 	public MachineScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate machineData) {
 		super(PseudoscienceBlocks.MACHINE_SCREEN_HANDLER, syncId);
 		this.machineData = machineData;
+		this.addProperties(machineData);
 		this.inventory = inventory;
 		// some inventories do custom logic when a player opens it.
 		inventory.onOpen(playerInventory.player);
+
 
 
 		this.addSlot(new Slot(inventory, 0, 56, 17));

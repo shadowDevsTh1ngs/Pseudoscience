@@ -3,8 +3,10 @@ package io.github.shadowdevsthings.pseudoscience;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.feature_flags.FeatureFlagBitSet;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -15,6 +17,8 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.block.entity.api.QuiltBlockEntityTypeBuilder;
+import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
+import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
 public class PseudoscienceBlocks {
 
@@ -25,7 +29,8 @@ public class PseudoscienceBlocks {
 
 
 	//Blocks
-	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0f).requiresTool(), MachineInventorySize);
+	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0F).requiresTool(), MachineInventorySize);
+	public static final Block ITEM_TUBE = new Block(QuiltBlockSettings.create().strength(2.0F).solid(false).nonOpaque());
 
 
 
@@ -42,15 +47,22 @@ public class PseudoscienceBlocks {
 		//Registering blocks and corresponding items
 		Registry.register(Registries.BLOCK, new Identifier(mod.metadata().id(), "extruder"), EXTRUDER);
 		Registry.register(Registries.ITEM, new Identifier(mod.metadata().id(), "extruder"), new BlockItem(EXTRUDER, new Item.Settings()));
+		Registry.register(Registries.BLOCK, new Identifier(mod.metadata().id(), "item_tube"), ITEM_TUBE);
+		Registry.register(Registries.ITEM, new Identifier(mod.metadata().id(), "item_tube"), new BlockItem(ITEM_TUBE, new Item.Settings()));
+
 
 		//Creative tab stuff
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL_BLOCKS).register(entries -> {
 			entries.addItem(EXTRUDER.asItem());
 		});
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL_BLOCKS).register(entries -> {
+			entries.addItem(ITEM_TUBE.asItem());
+		});
 
 		//Registering supporting stuff
 		Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(mod.metadata().id(), "extruder"), MACHINE_BLOCK_ENTITY);
 		HandledScreens.register(MACHINE_SCREEN_HANDLER, MachineScreen::new);
+		BlockRenderLayerMap.put(RenderLayer.getCutout(), ITEM_TUBE);
 
 
 		//Recipes
