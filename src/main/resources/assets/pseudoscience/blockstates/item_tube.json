@@ -1,7 +1,95 @@
 {
-  "variants": {
-    "": {
-      "model": "pseudoscience:block/item_tube"
+  "multipart": [
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_center"
+      },
+      "when": {
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_connection_north"
+      },
+      "when": {
+        "north": true,
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_connection_west"
+      },
+      "when": {
+        "west": true,
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_connection_up"
+      },
+      "when": {
+        "up": true,
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_connection_south"
+      },
+      "when": {
+        "south": true,
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_connection_east"
+      },
+      "when": {
+        "east": true,
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_connection_down"
+      },
+      "when": {
+        "down": true,
+        "straight": false
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_straight"
+      },
+      "when": {
+        "straight": true,
+        "north": true
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_straight",
+        "y": 90
+      },
+      "when": {
+        "straight": true,
+        "east": true
+      }
+    },
+    {
+      "apply": {
+        "model": "pseudoscience:block/item_tube_straight",
+        "x": 90
+      },
+      "when": {
+        "straight": true,
+        "up": true
+      }
     }
-  }
+  ]
 }

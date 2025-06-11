@@ -10,6 +10,7 @@
 			"from": [2, 9, 2],
 			"to": [7, 14, 7],
 			"rotation": {"angle": 0, "axis": "y", "origin": [2, 9, 2]},
+      "shade": false,
 			"faces": {
 				"north": {"uv": [0, 0, 5, 5], "texture": "#0"},
 				"east": {"uv": [0, 5, 5, 10], "texture": "#0"},

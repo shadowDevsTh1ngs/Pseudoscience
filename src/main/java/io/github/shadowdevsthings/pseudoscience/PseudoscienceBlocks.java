@@ -30,7 +30,7 @@ public class PseudoscienceBlocks {
 
 	//Blocks
 	public static final MachineBlock EXTRUDER = new MachineBlock(AbstractBlock.Settings.create().strength(4.0F).requiresTool(), MachineInventorySize);
-	public static final Block ITEM_TUBE = new Block(QuiltBlockSettings.create().strength(2.0F).solid(false).nonOpaque());
+	public static final ItemTubeBlock ITEM_TUBE = new ItemTubeBlock(QuiltBlockSettings.create().strength(2.0F).solid(false).nonOpaque());
 
 
 

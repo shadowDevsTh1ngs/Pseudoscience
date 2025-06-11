@@ -1,0 +1,24 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "pseudoscience:block/item_tube_line",
+		"particle": "pseudoscience:block/item_tube_line"
+	},
+	"elements": [
+		{
+			"from": [2, 9, 0],
+			"to": [7, 14, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 9, 2]},
+      "shade": false,
+			"faces": {
+				"north": {"uv": [5, 5, 7.5, 7.5], "texture": "#0"},
+				"east": {"uv": [0, 0, 8, 2.5], "texture": "#0"},
+				"south": {"uv": [5, 7.5, 7.5, 10], "texture": "#0"},
+				"west": {"uv": [8, 0, 0, 2.5], "texture": "#0"},
+				"up": {"uv": [2.5, 13, 0, 5], "texture": "#0"},
+				"down": {"uv": [5, 5, 2.5, 13], "texture": "#0"}
+			}
+		}
+	]
+}
