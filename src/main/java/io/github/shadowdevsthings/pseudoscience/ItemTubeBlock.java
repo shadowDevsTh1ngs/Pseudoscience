@@ -2,7 +2,10 @@ package io.github.shadowdevsthings.pseudoscience;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -10,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -23,18 +26,18 @@ public class ItemTubeBlock extends Block {
 
 
 	public static final MapCodec<MachineBlock> CODEC = Block.method_54094(MachineBlock::new);
-	public static final BooleanProperty UP = Properties.UP;
-	public static final BooleanProperty DOWN = Properties.DOWN;
-	public static final BooleanProperty NORTH = Properties.NORTH;
-	public static final BooleanProperty SOUTH = Properties.SOUTH;
-	public static final BooleanProperty EAST = Properties.EAST;
-	public static final BooleanProperty WEST = Properties.WEST;
+	public static final EnumProperty<ConduitConnection> UP = EnumProperty.of("up", ConduitConnection.class);
+	public static final EnumProperty<ConduitConnection> DOWN = EnumProperty.of("down", ConduitConnection.class);
+	public static final EnumProperty<ConduitConnection> NORTH = EnumProperty.of("north", ConduitConnection.class);
+	public static final EnumProperty<ConduitConnection> SOUTH = EnumProperty.of("south", ConduitConnection.class);
+	public static final EnumProperty<ConduitConnection> EAST = EnumProperty.of("east", ConduitConnection.class);
+	public static final EnumProperty<ConduitConnection> WEST = EnumProperty.of("west", ConduitConnection.class);
 	public static final BooleanProperty STRAIGHT = BooleanProperty.of("straight");
 
 	public ItemTubeBlock(Settings settings) {
 		super(settings);
 
-		setDefaultState(getDefaultState().with(UP, false).with(DOWN, false).with(NORTH, false).with(SOUTH, false).with(EAST, false).with(WEST, false).with(STRAIGHT, false));
+		setDefaultState(getDefaultState().with(UP, ConduitConnection.NONE).with(DOWN, ConduitConnection.NONE).with(NORTH, ConduitConnection.NONE).with(SOUTH, ConduitConnection.NONE).with(EAST, ConduitConnection.NONE).with(WEST, ConduitConnection.NONE).with(STRAIGHT, false));
 	}
 
 	@Override
@@ -57,19 +60,19 @@ public class ItemTubeBlock extends Block {
 		if(!world.isClient) {
 			BlockState newState = state;
 
-			newState = newState.with(NORTH, isValidConnection(world, pos.north()));
-			newState = newState.with(SOUTH, isValidConnection(world, pos.south()));
-			newState = newState.with(EAST, isValidConnection(world, pos.east()));
-			newState = newState.with(WEST, isValidConnection(world, pos.west()));
-			newState = newState.with(UP, isValidConnection(world, pos.up()));
-			newState = newState.with(DOWN, isValidConnection(world, pos.down()));
+			newState = getConnectionState(NORTH, newState, world, pos.north());
+			newState = getConnectionState(SOUTH, newState, world, pos.south());
+			newState = getConnectionState(EAST, newState, world, pos.east());
+			newState = getConnectionState(WEST, newState, world, pos.west());
+			newState = getConnectionState(UP, newState, world, pos.up());
+			newState = getConnectionState(DOWN, newState, world, pos.down());
 
-			boolean cNorth = newState.get(NORTH);
-			boolean cSouth = newState.get(SOUTH);
-			boolean cEast = newState.get(EAST);
-			boolean cWest = newState.get(WEST);
-			boolean cUp = newState.get(UP);
-			boolean cDown = newState.get(DOWN);
+			boolean cNorth = newState.get(NORTH).isConnected();
+			boolean cSouth = newState.get(SOUTH).isConnected();
+			boolean cEast = newState.get(EAST).isConnected();
+			boolean cWest = newState.get(WEST).isConnected();
+			boolean cUp = newState.get(UP).isConnected();
+			boolean cDown = newState.get(DOWN).isConnected();
 
 			if ((cNorth && cSouth && !cEast && !cWest && !cUp && !cDown) ^ (cEast && cWest && !cNorth && !cSouth && !cUp && !cDown) ^ (cUp && cDown && !cEast && !cWest && !cNorth && !cSouth)) {
 				newState = newState.with(STRAIGHT, true);
@@ -84,6 +87,33 @@ public class ItemTubeBlock extends Block {
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		update(world, pos, state);
+
+		BlockState newState = world.getBlockState(pos);
+		ItemTubeBlockEntity entity;
+
+		if(newState.get(NORTH) == ConduitConnection.CONDUIT) {
+			entity = ((ItemTubeBlock) world.getBlockState(pos.north()).getBlock()).getEntity(world, pos);
+		}
+		else if(newState.get(SOUTH) == ConduitConnection.CONDUIT) {
+			entity = ((ItemTubeBlock) world.getBlockState(pos.south()).getBlock()).getEntity(world, pos);
+		}
+		else if(newState.get(EAST) == ConduitConnection.CONDUIT) {
+			entity = ((ItemTubeBlock) world.getBlockState(pos.east()).getBlock()).getEntity(world, pos);
+		}
+		else if(newState.get(WEST) == ConduitConnection.CONDUIT) {
+			entity = ((ItemTubeBlock) world.getBlockState(pos.west()).getBlock()).getEntity(world, pos);
+		}
+		else if(newState.get(UP) == ConduitConnection.CONDUIT) {
+			entity = ((ItemTubeBlock) world.getBlockState(pos.up()).getBlock()).getEntity(world, pos);
+		}
+		else if(newState.get(DOWN) == ConduitConnection.CONDUIT) {
+			entity = ((ItemTubeBlock) world.getBlockState(pos.down()).getBlock()).getEntity(world, pos);
+		}
+		else {
+			entity = new ItemTubeBlockEntity(pos, newState);
+		}
+		world.addBlockEntity(entity);
+		getEntity(world, pos);
 	}
 
 	@Override
@@ -102,13 +132,6 @@ public class ItemTubeBlock extends Block {
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (ItemStack.itemsMatch(player.getStackInHand(hand), Items.STICK.getDefaultStack())) {
-//			Pseudoscience.LOGGER.info("North " + world.getBlockState(pos).get(NORTH));
-//			Pseudoscience.LOGGER.info("South " + world.getBlockState(pos).get(SOUTH));
-//			Pseudoscience.LOGGER.info("East " + world.getBlockState(pos).get(EAST));
-//			Pseudoscience.LOGGER.info("West " + world.getBlockState(pos).get(WEST));
-//			Pseudoscience.LOGGER.info("Up " + world.getBlockState(pos).get(UP));
-//			Pseudoscience.LOGGER.info("Down " + world.getBlockState(pos).get(DOWN));
-//			Pseudoscience.LOGGER.info("Straight " + world.getBlockState(pos).get(STRAIGHT));
 			player.sendMessage(Text.literal(world.getTime() + " ==========================="), false);
 			player.sendMessage(Text.literal("North " + world.getBlockState(pos).get(NORTH)), false);
 			player.sendMessage(Text.literal("South " + world.getBlockState(pos).get(SOUTH)), false);
@@ -116,15 +139,35 @@ public class ItemTubeBlock extends Block {
 			player.sendMessage(Text.literal("West " + world.getBlockState(pos).get(WEST)), false);
 			player.sendMessage(Text.literal("Up " + world.getBlockState(pos).get(UP)), false);
 			player.sendMessage(Text.literal("Down " + world.getBlockState(pos).get(DOWN)), false);
+			player.sendMessage(Text.literal("Entity " + getEntity(world, pos)), false);
 			return ActionResult.SUCCESS;
 		} else {
 			return ActionResult.FAIL;
 		}
 	}
 
-	public boolean isValidConnection(World world, BlockPos pos) {
+	public BlockState getConnectionState(EnumProperty<ConduitConnection> side, BlockState state, World world, BlockPos pos) {
 		Block block = world.getBlockState(pos).getBlock();
-		return block instanceof ItemTubeBlock || world.getBlockEntity(pos) instanceof Inventory;
+		if(state.get(side).isDisconnected()) {
+			return state.with(side, ConduitConnection.DISCONNECTED);
+		} else if(block instanceof ItemTubeBlock) {
+			return state.with(side, ConduitConnection.CONDUIT);
+		} else if(world.getBlockEntity(pos) instanceof Inventory) {
+			return state.with(side, ConduitConnection.CONNECTION);
+		} else {
+			return state.with(side, ConduitConnection.NONE);
+		}
 	}
+
+	public ItemTubeBlockEntity getEntity(World world, BlockPos pos) {
+		if(!(world.getBlockEntity(pos) instanceof ItemTubeBlockEntity)) {
+			Pseudoscience.LOGGER.info("fuck");
+		}
+		return (ItemTubeBlockEntity) world.getBlockEntity(pos);
+	}
+
+
+
+
 
 }

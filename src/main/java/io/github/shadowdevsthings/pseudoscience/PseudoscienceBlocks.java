@@ -40,7 +40,7 @@ public class PseudoscienceBlocks {
 
 	public static final ScreenHandlerType<MachineScreenHandler> MACHINE_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER_TYPE, new Identifier("pseudoscience:extruder"), new ScreenHandlerType<>(MachineScreenHandler::new, FeatureFlagBitSet.empty()));
 
-
+	public static final BlockEntityType<ItemTubeBlockEntity> ITEM_TUBE_BLOCK_ENTITY = QuiltBlockEntityTypeBuilder.<ItemTubeBlockEntity>create(ItemTubeBlockEntity::new, ITEM_TUBE).build();
 
 
 	public static void register(ModContainer mod) {
@@ -63,6 +63,8 @@ public class PseudoscienceBlocks {
 		Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(mod.metadata().id(), "extruder"), MACHINE_BLOCK_ENTITY);
 		HandledScreens.register(MACHINE_SCREEN_HANDLER, MachineScreen::new);
 		BlockRenderLayerMap.put(RenderLayer.getCutout(), ITEM_TUBE);
+
+		Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(mod.metadata().id(), "item_tube"), ITEM_TUBE_BLOCK_ENTITY);
 
 
 		//Recipes

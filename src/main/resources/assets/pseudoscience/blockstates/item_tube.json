@@ -13,7 +13,7 @@
         "model": "pseudoscience:block/item_tube_connection_north"
       },
       "when": {
-        "north": true,
+        "north": "connection|conduit",
         "straight": false
       }
     },
@@ -22,7 +22,7 @@
         "model": "pseudoscience:block/item_tube_connection_west"
       },
       "when": {
-        "west": true,
+        "west": "connection|conduit",
         "straight": false
       }
     },
@@ -31,7 +31,7 @@
         "model": "pseudoscience:block/item_tube_connection_up"
       },
       "when": {
-        "up": true,
+        "up": "connection|conduit",
         "straight": false
       }
     },
@@ -40,7 +40,7 @@
         "model": "pseudoscience:block/item_tube_connection_south"
       },
       "when": {
-        "south": true,
+        "south": "connection|conduit",
         "straight": false
       }
     },
@@ -49,7 +49,7 @@
         "model": "pseudoscience:block/item_tube_connection_east"
       },
       "when": {
-        "east": true,
+        "east": "connection|conduit",
         "straight": false
       }
     },
@@ -58,7 +58,7 @@
         "model": "pseudoscience:block/item_tube_connection_down"
       },
       "when": {
-        "down": true,
+        "down": "connection|conduit",
         "straight": false
       }
     },
@@ -68,7 +68,7 @@
       },
       "when": {
         "straight": true,
-        "north": true
+        "north": "connection|conduit"
       }
     },
     {
@@ -78,7 +78,7 @@
       },
       "when": {
         "straight": true,
-        "east": true
+        "east": "connection|conduit"
       }
     },
     {
@@ -88,7 +88,7 @@
       },
       "when": {
         "straight": true,
-        "up": true
+        "up": "connection|conduit"
       }
     }
   ]
